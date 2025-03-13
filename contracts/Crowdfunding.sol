@@ -8,6 +8,9 @@ contract Crowdfunding {
     uint256 public deadline;
     address public owner;
 
+    enum CampaignState{ Active, Success, Failed }
+    CampaignState public state;
+
     struct Tier {
         string name;
         uint256 amount;
@@ -22,6 +25,16 @@ contract Crowdfunding {
         _; // run onlyOwner() if meet the validation requirement
     }
 
+    modifier isCampaignActive() {
+        require(state == CampaignState.Active, "Campaign is not active");
+        _;
+    }
+
+    modifier CampaignShouldSuccess() {
+        require(state == CampaignState.Success, "Campaign is not success");
+        _;
+    }
+
     constructor (
         string memory _name, 
         string memory _description, 
@@ -33,14 +46,28 @@ contract Crowdfunding {
             goal = _goal;
             deadline =  block.timestamp + (_durationInDays * 86400);
             owner = msg.sender; // this person who deployed this contract
+            state = CampaignState.Active;
         }
 
-    function fund(uint256 _tierIndex) public payable{
-        require(block.timestamp < deadline, "Campaign has ended");
+    function checkAndUpdateCampaignState() internal {
+        if(state == CampaignState.Active){
+            if(block.timestamp >= deadline){
+                state = address(this).balance >= goal ? CampaignState.Success : CampaignState.Failed;
+            } else {
+                state = address(this).balance >= goal ? CampaignState.Success : CampaignState.Success;
+            }
+        }
+    }
+
+    function fund(uint256 _tierIndex) public payable isCampaignActive{
+        // require(block.timestamp < deadline, "Campaign has ended");
+        // commented because soon this validation will handle by isCampaignActive modifier
         require(_tierIndex < tiers.length, "Invalid tier");
         require(msg.value == tiers[_tierIndex].amount, "Incorrect amount");
 
         tiers[_tierIndex].backers++;
+        
+        checkAndUpdateCampaignState(); // update campaign status or state to be following requirement.
     }
 
     function addTier(
@@ -57,8 +84,9 @@ contract Crowdfunding {
         tiers.pop();
     }
 
-    function withdraw() public onlyOwner {
-        require(address(this).balance >= goal, "goal has not been reached");
+    function withdraw() public onlyOwner CampaignShouldSuccess {
+        // require(address(this).balance >= goal, "goal has not been reached");
+        checkAndUpdateCampaignState();
 
         uint256 balance = address(this).balance;
         require(balance > 0, "No balance to withdraw");

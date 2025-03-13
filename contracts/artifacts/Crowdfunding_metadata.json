@@ -167,6 +167,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "state",
+				"outputs": [
+					{
+						"internalType": "enum Crowdfunding.CampaignState",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -231,11 +244,11 @@
 	},
 	"sources": {
 		"contracts/Crowdfunding.sol": {
-			"keccak256": "0x2b0741f998ef8fb2187c39f40b65980ee78894c587f78945a18a8e21380cf3b1",
+			"keccak256": "0xccfd185a7c467a70013cb5c90669670683d1590e7b41a76f70e56964c7e5daa6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://085eebc6f9932fb55c1607ad59e08790e3862c6a28e2e63bfc645fa833ec763b",
-				"dweb:/ipfs/QmVVhcqK8kgWKSK3zuqX3bFz6Ej3i5agKZ9jdm3NQXRkjm"
+				"bzz-raw://acaac4984d3629c6b359b12c5ad51d27a3361477bab7bc36b10d3c545c23aca5",
+				"dweb:/ipfs/QmXMsrTAVd9dUUXeyCPsahCjVc9fPznYEEeHbHPPpweLcq"
 			]
 		}
 	},

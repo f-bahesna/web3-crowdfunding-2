@@ -50,6 +50,25 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "backers",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "totalContribution",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "deadline",
 				"outputs": [
@@ -103,25 +122,36 @@
 			},
 			{
 				"inputs": [],
-				"name": "getInfo",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "goal",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_backer",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_tierIndex",
+						"type": "uint256"
+					}
+				],
+				"name": "hasFundedTier",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -151,6 +181,13 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "refund",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -244,11 +281,11 @@
 	},
 	"sources": {
 		"contracts/Crowdfunding.sol": {
-			"keccak256": "0xccfd185a7c467a70013cb5c90669670683d1590e7b41a76f70e56964c7e5daa6",
+			"keccak256": "0x302c4ba32e39f081d97407bd8137abaab56a173370c64252f5b849f15c5a6f82",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://acaac4984d3629c6b359b12c5ad51d27a3361477bab7bc36b10d3c545c23aca5",
-				"dweb:/ipfs/QmXMsrTAVd9dUUXeyCPsahCjVc9fPznYEEeHbHPPpweLcq"
+				"bzz-raw://d9695f525411e67967fcddf48d3f7c4754c962be115eb68246e9f4d44dd1da0a",
+				"dweb:/ipfs/Qma1NHV4CbZQPWJXKVEfEnYMw9fJynpztx3jE8TqqU7b8R"
 			]
 		}
 	},

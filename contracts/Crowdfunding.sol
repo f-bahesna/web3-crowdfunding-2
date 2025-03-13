@@ -17,7 +17,15 @@ contract Crowdfunding {
         uint256 backers;
     }
 
+    // to see a wallet transaction
+    // for function to know what amount we have to refund to investor
+    struct Backer {
+        uint256 totalContribution;
+        mapping(uint256 => bool) fundedTiers;
+    }
+
     Tier[] public tiers;
+    mapping(address => Backer) public backers;
 
     //its like middleware
     modifier onlyOwner() {
@@ -54,7 +62,7 @@ contract Crowdfunding {
             if(block.timestamp >= deadline){
                 state = address(this).balance >= goal ? CampaignState.Success : CampaignState.Failed;
             } else {
-                state = address(this).balance >= goal ? CampaignState.Success : CampaignState.Success;
+                state = address(this).balance >= goal ? CampaignState.Success : CampaignState.Active;
             }
         }
     }
@@ -66,7 +74,9 @@ contract Crowdfunding {
         require(msg.value == tiers[_tierIndex].amount, "Incorrect amount");
 
         tiers[_tierIndex].backers++;
-        
+        backers[msg.sender].totalContribution += msg.value; // this is to track investor total contribution
+        backers[msg.sender].fundedTiers[_tierIndex] = true; // this is to track investor funded tiers 
+
         checkAndUpdateCampaignState(); // update campaign status or state to be following requirement.
     }
 
@@ -97,7 +107,17 @@ contract Crowdfunding {
         return address(this).balance;
     }
 
-    function getInfo() public view returns (string memory) {
-        return string(abi.encodePacked('Name: ', name, ' Description: ', description));
-    }   
+    function refund() public {
+        checkAndUpdateCampaignState(); // make sure in the correct state
+        require(state == CampaignState.Failed, "Refund not eligible"); // request refund when campaign fail
+        uint256 amount = backers[msg.sender].totalContribution;
+        require(amount > 0, "Contribution not found, refund failed");
+
+        backers[msg.sender].totalContribution = 0;
+        payable(msg.sender).transfer(amount);
+    } 
+
+    function hasFundedTier(address _backer, uint256 _tierIndex) public view returns (bool) {
+        return backers[_backer].fundedTiers[_tierIndex];
+    }
 }
